@@ -23,7 +23,8 @@ public class Primes {
 	        Consumer c = new Consumer(buf);
 	        P.start();
 	        c.start();
-	          
+	        
+            System.out.println(P.MX());			
 	       
 	    }
 	    

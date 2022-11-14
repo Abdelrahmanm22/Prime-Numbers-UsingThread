@@ -18,27 +18,23 @@ public class Producer extends Thread{
     buffer b;
     Queue<Integer> Primes_numbers  = new PriorityQueue<>();
     
+    int MAX  = -1;
+  
     public Producer(buffer b ){
         this.b=b;
         for(int i = 0 ; i <=b.N; i ++) {
         	if(isPrime(i)) {
         		Primes_numbers.add(i); 
+        		MAX  = Math.max(i, MAX); 
         	}
         }
     }
-    
-    int MAX  = -1;
-    public int MX (){
-        return MAX;
-    }
-    
-    
-    
     
     @Override
     public void run(){
         for(Integer p : Primes_numbers) {
         	try {
+        		
         		b.produce(p);
         				
 			} catch (InterruptedException e) {
@@ -56,4 +52,8 @@ public class Producer extends Thread{
         }
         return true;
     }
+    public int MX (){
+        return MAX;
+    }
+    
 }
