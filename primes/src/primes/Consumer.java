@@ -4,6 +4,9 @@
  */
 package primes;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author future
@@ -17,7 +20,11 @@ public class Consumer extends Thread{
     @Override
     public void run(){
         for(int i=0;i<=b.N;i++){
-            System.out.print(b.consume()+", ");
+            try {
+                System.out.print(b.consume()+", ");
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }
