@@ -18,6 +18,10 @@ public class Producer extends Thread{
         this.b=b;
         
     }
+    int MAX  = -1;
+    public int MX (){
+        return MAX;
+    }
 
     
     @Override
@@ -26,6 +30,7 @@ public class Producer extends Thread{
             if(isPrime(i))
                 try {
                     b.produce(i);
+                    MAX = Math.max(MAX , i); 
             } catch (InterruptedException ex) {
                 Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
             }

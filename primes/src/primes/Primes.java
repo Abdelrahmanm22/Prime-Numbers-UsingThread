@@ -34,9 +34,11 @@ public class Primes {
         buffer buf = new buffer(N);
         Producer P = new Producer(buf);
         Consumer c = new Consumer(buf);
-        
         P.start();
         c.start();
+        while(!p.IsAlive() && !c.IsAlive()){
+            System.out.println(p.MX());     
+        }
     }
     
 }
