@@ -4,6 +4,9 @@
  */
 package primes;
 
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,27 +16,34 @@ import java.util.logging.Logger;
  */
 public class Producer extends Thread{
     buffer b;
+    Queue<Integer> Primes_numbers  = new PriorityQueue<>();
     
-    public Producer(buffer b){
+    public Producer(buffer b ){
         this.b=b;
-        
+        for(int i = 0 ; i <=b.N; i ++) {
+        	if(isPrime(i)) {
+        		Primes_numbers.add(i); 
+        	}
+        }
     }
+    
     int MAX  = -1;
     public int MX (){
         return MAX;
     }
-
+    
+    
+    
     
     @Override
     public void run(){
-        for(int i=0;i<=b.N;i++){
-            if(isPrime(i))
-                try {
-                    b.produce(i);
-                    MAX = Math.max(MAX , i); 
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        for(Integer p : Primes_numbers) {
+        	try {
+        		b.produce(p);
+        				
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
         }
     }
     

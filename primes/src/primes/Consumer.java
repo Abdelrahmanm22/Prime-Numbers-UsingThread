@@ -13,18 +13,19 @@ import java.util.logging.Logger;
  */
 public class Consumer extends Thread{
     buffer b;
-    
+    boolean end; 
     public Consumer(buffer b){
         this.b=b;
     }
     @Override
     public void run(){
-        for(int i=0;i<=b.N;i++){
-            try {
-                System.out.print(b.consume()+", ");
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    		try {
+				b.consume();
+			} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+		 		e.printStackTrace();
+	     	}
+    		
     }
-}
+ }
+

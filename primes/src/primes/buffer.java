@@ -4,7 +4,7 @@
  */
 package primes;
 
-import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
@@ -12,52 +12,37 @@ import java.util.Queue;
  * @author future
  */
 public class buffer {
-    private int Size = 5;
-//    private int store[]= new int[Size];
-    private Queue <Integer> queue = new LinkedList<>();
+    static public int Size = 5;
+    static public int cnt = 0; 
+	static public  boolean Lock = false ; 
+    static public Queue <Integer> queue = new PriorityQueue<>();
     protected int N; 
     
-    private int inptr = 0;
-    private int outptr = 0;
-    
-    Semaphore spaces = new Semaphore(Size);
-    Semaphore elements = new Semaphore(0);
-    
-    public buffer(int size){
-        this.N=size;
+    public void Resize(int n) {
+    	this.N = n; 
     }
-    
     
     public void produce(int value) throws InterruptedException{
         
         synchronized(this){
-            while(queue.size()==Size)
-                wait();
-            
-            queue.add(value);
-            notify();
-        }
-//        spaces.P();
-//        store[inptr] = value;
-//        inptr = (inptr+1)%Size;
-//        elements.V();
+       
+        	queue.add(value);
+        	
+        	notifyAll();
+       }
     }
     
-    public int consume() throws InterruptedException{
-        int value;
-        synchronized(this){
-            while(queue.size()==0)
-                wait();
-            
-            value = queue.remove();
-            notify();
-            return value;
+    public void consume() throws InterruptedException{
+   
+        synchronized(this) {
+        	while(queue.size() < Size)
+        		wait();
+        	while(queue.size() > 0) {
+        		System.out.print(queue.remove() + ", " );
+        	}
+        	
+        	notifyAll();
         }
-//        int value;
-//        elements.P();
-//        value = store[outptr];
-//        outptr = (outptr+1)%Size;
-//        spaces.V();
-//        return value;
     }
+	
 }
