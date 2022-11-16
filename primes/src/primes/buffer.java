@@ -12,37 +12,40 @@ import java.util.Queue;
  * @author future
  */
 public class buffer {
-    static public int Size = 5;
-    static public int cnt = 0; 
-	static public  boolean Lock = false ; 
-    static public Queue <Integer> queue = new PriorityQueue<>();
-    protected int N; 
+	private int size = 8; // the buffer bound
+	private Object store[] = new Object[size];
+	private int inptr = 0;
+	private int outptr = 0;	
+	public int N = -1 ; 
+	public int Max_size ;
+	public int Max_prime = -1; 
+	static public boolean DoneProducer=  false , Doneconsumer = false; 
+	
+	public buffer(int n) {
+		this.Max_size = n; 
+	}
+	
+	
+    semaphore spaces = new semaphore(size);
+    semaphore elements = new semaphore(0); 
     
-    public void Resize(int n) {
-    	this.N = n; 
+    public void produce(Object value) throws InterruptedException{
+    	spaces.P();
+    	store[inptr] = value;
+    	Max_prime = Math.max(Max_prime, (int) value); 
+    	inptr = (inptr + 1) % size;
+    	elements.V();
+
     }
     
-    public void produce(int value) throws InterruptedException{
-        
-        synchronized(this){
-       
-        	queue.add(value);
-        	
-        	notifyAll();
-       }
-    }
-    
-    public void consume() throws InterruptedException{
-   
-        synchronized(this) {
-        	while(queue.size() < Size)
-        		wait();
-        	while(queue.size() > 0) {
-        		System.out.print(queue.remove() + ", " );
-        	}
-        	
-        	notifyAll();
-        }
+    public Object consume() throws InterruptedException{
+    	Object value;
+    	elements.P();
+    	value = store[outptr];
+    	outptr = (outptr + 1) % size;
+    	spaces.V();
+    	return value;	
+ 
     }
 	
 }

@@ -4,6 +4,7 @@
  */
 package primes;
 
+import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,19 +14,22 @@ import java.util.logging.Logger;
  */
 public class Consumer extends Thread{
     buffer b;
-    boolean end; 
-    public Consumer(buffer b){
+    PrintStream stream;
+    public Consumer(buffer b , PrintStream stream){
         this.b=b;
+        this.stream = stream; 
+        System.setOut(stream);
     }
     @Override
-    public void run(){
+    public void run() {
+    	for(int i = 1 ; i<=b.N; i++) {
     		try {
-				b.consume();
+				System.out.print(b.consume() + ", ");
 			} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-		 		e.printStackTrace();
-	     	}
-    		
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
- }
+}
 
