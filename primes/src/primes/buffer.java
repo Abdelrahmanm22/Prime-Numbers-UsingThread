@@ -12,22 +12,27 @@ import java.util.Queue;
  * @author future
  */
 public class buffer {
-	private int size = 8; // the buffer bound
-	private Object store[] = new Object[size];
+	private int size; // the buffer bound
+	private Object store[];
 	private int inptr = 0;
 	private int outptr = 0;	
 	public int N = -1 ; 
 	public int Max_size ;
 	public int Max_prime = -1; 
 	static public boolean DoneProducer=  false , Doneconsumer = false; 
+	private semaphore spaces;
+    private semaphore elements;
 	
-	public buffer(int n) {
+	public buffer(int n, int size) {
 		this.Max_size = n; 
+		this.size = size;
+		this.spaces = new semaphore(this.size);
+	    this.elements = new semaphore(0); 
+	    this.store = new Object[this.size];
 	}
 	
 	
-    semaphore spaces = new semaphore(size);
-    semaphore elements = new semaphore(0); 
+    
     
     public void produce(Object value) throws InterruptedException{
     	spaces.P();
