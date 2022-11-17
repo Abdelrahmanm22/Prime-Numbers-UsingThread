@@ -8,17 +8,23 @@ import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JLabel;
+
 /**
  *
  * @author future
  */
 public class Consumer extends Thread{
     buffer b;
-    PrintStream stream;
-    public Consumer(buffer b , PrintStream stream){
+    JLabel lTimeValue;
+    long start1;
+    //PrintStream stream;
+    public Consumer(buffer b , JLabel lTimeValue, long start1){
         this.b=b;
-        this.stream = stream; 
-        System.setOut(stream);
+        this.lTimeValue = lTimeValue;
+        this.start1 = start1;
+        //this.stream = stream; 
+        //System.setOut(stream);
     }
     @Override
     public void run() {
@@ -30,6 +36,7 @@ public class Consumer extends Thread{
 				e.printStackTrace();
 			}
     	}
+    	long time = System.currentTimeMillis() - start1;
+    	lTimeValue.setText(String.valueOf(time)+"ms");
     }
 }
-
